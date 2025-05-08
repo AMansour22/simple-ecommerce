@@ -27,7 +27,7 @@ class OrdersResolver
             throw new InvalidArgumentException('Order items are required');
         }
 
-        $db = new Database();
+        $db = Database::getInstance();
         $db->beginTransaction();
 
         try {

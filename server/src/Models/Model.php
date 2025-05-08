@@ -20,7 +20,7 @@ abstract class Model
     public function __construct()
     {
         try {
-            $this->db = new Database();
+            $this->db = Database::getInstance();
             
             // Set default table name based on class name if not explicitly defined
             if (!isset(static::$table)) {
@@ -60,7 +60,7 @@ abstract class Model
             return (new static)->db->query(
                 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' = :value LIMIT 1',
                 ['value' => $value]
-            )->fetchOrFail();
+            )->fetch(); // Fetch a single record
         } catch (\Exception $e) {
             throw new RuntimeException("Failed to find record by $column: " . $e->getMessage());
         }
