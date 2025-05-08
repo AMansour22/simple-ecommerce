@@ -17,11 +17,9 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  // Sync local showModal with context's isCartOpen
+  // Sync context's isCartOpen with local showModal in both directions
   useEffect(() => {
-    if (isCartOpen) {
-      setShowModal(true); // Open modal when item is added via context
-    }
+    setShowModal(isCartOpen);
   }, [isCartOpen]);
 
   const toggleModal = () => {

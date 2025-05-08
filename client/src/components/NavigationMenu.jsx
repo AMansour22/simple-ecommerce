@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { useDataContext } from '../DataContext';
 
 function NavigationMenu({ categories, handleCategoryChange }) {
-  const { selectedCategory } = useDataContext();
+  const { selectedCategory, setIsCartOpen } = useDataContext();
+  const handleNavClick = (category) => {
+    setIsCartOpen(false);
+    handleCategoryChange(category);
+  };
 
   return (
     <nav className="z-10">
@@ -14,9 +18,15 @@ function NavigationMenu({ categories, handleCategoryChange }) {
             <li key={category}>
               <Link
                 to={`/${category}`}
-                className={`block pb-4 border-b-2 ${isSelected ? 'nav-active' : 'border-transparent hover:text-primary'}`}
-                data-testid={isSelected ? 'active-category-link' : 'category-link'}
-                onClick={() => handleCategoryChange(category)}
+                className={`block pb-4 border-b-2 ${
+                  isSelected
+                    ? 'nav-active'
+                    : 'border-transparent hover:text-primary'
+                }`}
+                data-testid={
+                  isSelected ? 'active-category-link' : 'category-link'
+                }
+                onClick={() => handleNavClick(category)}
               >
                 {category}
               </Link>
