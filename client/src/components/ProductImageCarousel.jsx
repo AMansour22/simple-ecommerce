@@ -6,7 +6,7 @@ const ProductImageCarousel = ({ images = [], alt = 'Product' }) => {
   // State for current image index and main image height
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mainImageHeight, setMainImageHeight] = useState(null);
-  
+
   // Refs to track thumbnail elements
   const thumbnailRefs = useRef({});
 
@@ -49,12 +49,14 @@ const ProductImageCarousel = ({ images = [], alt = 'Product' }) => {
                   ref={(el) => (thumbnailRefs.current[index] = el)}
                   src={image}
                   alt={alt}
-                  className={`w-full ${index === currentIndex ? 'opacity-50' : 'opacity-100'} cursor-pointer`}
+                  className={`w-full ${
+                    index === currentIndex ? 'opacity-50' : 'opacity-100'
+                  } cursor-pointer`}
                   onClick={() => setCurrentIndex(index)}
                 />
               ))}
             </div>
-            
+
             {/* Main image display */}
             <div className="relative w-4/5">
               <img
@@ -64,7 +66,7 @@ const ProductImageCarousel = ({ images = [], alt = 'Product' }) => {
                 onLoad={handleMainImageLoad}
                 style={{ maxHeight: mainImageHeight || '100vh' }}
               />
-              
+
               {/* Previous button */}
               <button
                 className="absolute rounded-sm p-2 hover:bg-gray-600 text-white transition-colors duration-300 transform -translate-y-1/2 bg-text top-1/2 left-4 hover:text-white"
@@ -72,7 +74,7 @@ const ProductImageCarousel = ({ images = [], alt = 'Product' }) => {
               >
                 <Arrow direction="left" />
               </button>
-              
+
               {/* Next button */}
               <button
                 className="absolute rounded-sm p-2 hover:bg-gray-600 text-white transition-colors duration-300 transform -translate-y-1/2 bg-text top-1/2 right-4 hover:text-white"
@@ -80,11 +82,6 @@ const ProductImageCarousel = ({ images = [], alt = 'Product' }) => {
               >
                 <Arrow />
               </button>
-              
-              {/* Image counter */}
-              <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
-                {currentIndex + 1} / {images.length}
-              </div>
             </div>
           </div>
         </div>

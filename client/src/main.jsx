@@ -6,6 +6,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './assets/index.css';
 
+
 const apolloClient = new ApolloClient({
   uri: "/graphql",
   cache: new InMemoryCache(),
