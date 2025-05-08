@@ -40,31 +40,44 @@ const ProductImageCarousel = ({ images = [], alt = 'Product' }) => {
           <div className="relative flex">
             {/* Thumbnail gallery */}
             <div
-              className="w-1/5 max-h-screen overflow-y-auto flex flex-col gap-2"
+              className="flex flex-col gap-2 items-center"
               style={{ maxHeight: mainImageHeight }}
             >
               {images.map((image, index) => (
-                <img
+                <div
                   key={index}
-                  ref={(el) => (thumbnailRefs.current[index] = el)}
-                  src={image}
-                  alt={alt}
-                  className={`w-full ${
+                  className={`w-20 h-20 flex items-center justify-center ${
                     index === currentIndex ? 'opacity-50' : 'opacity-100'
                   } cursor-pointer`}
                   onClick={() => setCurrentIndex(index)}
-                />
+                  style={{ aspectRatio: '1 / 1' }}
+                >
+                  <img
+                    ref={(el) => {
+                      if (thumbnailRefs.current) {
+                        thumbnailRefs.current[index] = el;
+                      }
+                    }}
+                    src={image}
+                    alt={alt}
+                    className="object-contain w-full h-full"
+                  />
+                </div>
               ))}
             </div>
 
             {/* Main image display */}
-            <div className="relative w-4/5">
+            <div className="relative w-4/5 max-w-full mx-auto">
               <img
                 src={images[currentIndex]}
                 alt={alt}
-                className="object-contain w-full h-auto"
+                className="object-contain w-full h-auto max-w-full"
                 onLoad={handleMainImageLoad}
-                style={{ maxHeight: mainImageHeight || '100vh' }}
+                style={{
+                  maxHeight: mainImageHeight ? `${mainImageHeight}px` : '100vh',
+                  width: '100%',
+                  height: 'auto',
+                }}
               />
 
               {/* Previous button */}
