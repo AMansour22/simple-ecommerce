@@ -105,7 +105,7 @@ const ProductAttributes = ({
           </h3>
           <div
             className={`flex flex-wrap gap-y-2 ${
-              isModalView ? 'gap-x-2' : 'gap-x-3'
+              isModalView ? 'gap-x-2 pl-1' : 'gap-x-3'
             }`}
             role="group"
             aria-label={`${attributeSet.name} options`}
@@ -120,9 +120,9 @@ const ProductAttributes = ({
                   type="button"
                   key={attribute.id}
                   className={`
-                    relative ${isModalView ? 'w-5 h-5' : 'w-8 h-8'}
-                    ${isSelected ? 'border-primary' : 'border-white'}
-                    border transition-colors
+                    relative ${
+                      isModalView ? 'w-5 h-5' : 'w-8 h-8'
+                    }                    
                     ${
                       product.inStock && !isReadOnly
                         ? 'hover:border-primary'
@@ -146,7 +146,7 @@ const ProductAttributes = ({
                   aria-pressed={isSelected}
                   aria-label={`Color: ${attribute.displayValue}`}
                 >
-                  <div className="absolute inset-0 border border-gray-200" />
+                  <div className="absolute inset-0 border border-gray-300" />
                 </button>
               ) : (
                 <button
