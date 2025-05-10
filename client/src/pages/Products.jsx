@@ -1,8 +1,11 @@
 import { ProductCard } from '../components';
 import { useProduct } from '../contexts/ProductContext';
+import { Loading } from '../components';
 
 function Products() {
-  const { selectedCategory, productsData } = useProduct();
+  const { selectedCategory, productsData, loading } = useProduct();
+
+  if (loading) return <Loading />;
 
   return (
     <main className="mt-14">
