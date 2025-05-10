@@ -13,10 +13,9 @@ class Product extends Model
      * @return array Array of products with their details
      * @throws RuntimeException If query execution fails
      */
-    public static function all(?string $category = null): array
+    public function all(?string $category = null): array
     {
         try {
-            $products = new static();
             $query = 'SELECT * FROM ' . static::$table;
             $params = [];
 
@@ -25,11 +24,11 @@ class Product extends Model
                 $params['category'] = $category;
             }
 
-            $products = $products->db->query($query, $params)->get();
+            $products = $this->db->query($query, $params)->get();
 
             // Enrich each product with additional details
             foreach ($products as &$product) {
-                self::fetchProductDetails($product);
+                $this->fetchProductDetails($product);
             }
 
             return $products;
@@ -46,13 +45,13 @@ class Product extends Model
      * @return array|null The found product with details or null if not found
      * @throws RuntimeException If query execution fails
      */
-    public static function find(string $value, ?string $column = null): ?array
+    public function find(string $value, ?string $column = null): ?array
     {
         try {
             $product = parent::find($value, $column ?? 'id');
 
             if ($product) {
-                self::fetchProductDetails($product);
+                $this->fetchProductDetails($product);
             }
 
             return $product;
@@ -67,7 +66,7 @@ class Product extends Model
      * @param array &$product The product array to enrich (passed by reference)
      * @throws RuntimeException If detail fetching fails
      */
-    private static function fetchProductDetails(array &$product): void
+    private function fetchProductDetails(array &$product): void
     {
         try {
             // Decode gallery JSON and ensure it's an array
@@ -75,8 +74,10 @@ class Product extends Model
             $product['gallery'] = $gallery !== null && is_array($gallery) ? $gallery : [];
 
             // Fetch prices and attributes for the product
-            $product['prices'] = Price::getByProductId($product['id']);
-            $product['attributes'] = Attribute::getByProductId($product['id']);
+            $price = new Price();
+            $attribute = new Attribute();
+            $product['prices'] = $price->getByProductId($product['id']);
+            $product['attributes'] = $attribute->getByProductId($product['id']);
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to fetch product details: ' . $e->getMessage());
         }

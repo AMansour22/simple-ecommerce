@@ -14,14 +14,13 @@ class OrderItem extends Model
     /**
      * Inserts a new item into an order
      *
-     * @param Database $db Database connection instance
      * @param int $orderId The ID of the order
      * @param array $productDetails Product details including required fields: productId, productName, etc.
      * @return array Result array containing success status and optional error message
      * @throws InvalidArgumentException If required product details are missing
      * @throws RuntimeException If database insertion fails
      */
-    public static function insertItem(Database $db, int $orderId, array $productDetails): array
+    public function insertItem(int $orderId, array $productDetails): array
     {
         $requiredFields = ['productId', 'productName', 'attributeValues', 'quantity', 'paidAmount', 'paidCurrency'];
         foreach ($requiredFields as $field) {
@@ -31,7 +30,7 @@ class OrderItem extends Model
         }
 
         try {
-            $result = $db->query(
+            $result = $this->db->query(
                 'INSERT INTO ' . static::$table . 
                 ' (order_id, product_id, product_name, attribute_values, quantity, paid_amount, paid_currency) ' .
                 'VALUES (?, ?, ?, ?, ?, ?, ?)',

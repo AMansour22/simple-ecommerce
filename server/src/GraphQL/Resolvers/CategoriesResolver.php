@@ -19,7 +19,8 @@ class CategoriesResolver
     public static function index(): array
     {
         try {
-            return Category::all();
+            $category = new Category();
+            return $category->all();
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to fetch categories: ' . $e->getMessage());
         }

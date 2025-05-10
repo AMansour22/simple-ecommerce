@@ -11,7 +11,7 @@ class Attribute extends Model
      * @return array An array of attributes with their values organized by attribute ID
      * @throws RuntimeException If query execution fails or invalid product ID provided
      */
-    public static function getByProductId($productId): array
+    public function getByProductId($productId): array
     {
         if (empty($productId)) {
             throw new RuntimeException('Product ID cannot be empty');
@@ -21,7 +21,7 @@ class Attribute extends Model
             $attributes = [];
             
             // Fetch attributes with their details through a JOIN query
-            $items = (new static)->db->query(
+            $items = $this->db->query(
                 'SELECT 
                     pa.*, 
                     a.name as attribute_name, 

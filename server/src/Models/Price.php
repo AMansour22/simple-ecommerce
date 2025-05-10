@@ -13,14 +13,14 @@ class Price extends Model
      * @return array Array of formatted prices with currency information
      * @throws RuntimeException If query execution fails or invalid product ID provided
      */
-    public static function getByProductId($productId): array
+    public function getByProductId($productId): array
     {
         if (empty($productId)) {
             throw new RuntimeException('Product ID cannot be empty');
         }
 
         try {
-            $prices = (new static)->db->query(
+            $prices = $this->db->query(
                 'SELECT 
                     p.amount, 
                     c.label, 

@@ -37,10 +37,10 @@ abstract class Model
      * @return array Array of all records
      * @throws RuntimeException If query execution fails
      */
-    public static function all(): array
+    public function all(): array
     {
         try {
-            return (new static)->db->query('SELECT * FROM ' . static::$table)->get();
+            return $this->db->query('SELECT * FROM ' . static::$table)->get();
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to fetch all records: ' . $e->getMessage());
         }
@@ -54,10 +54,10 @@ abstract class Model
      * @return array|null The found record or null if not found
      * @throws RuntimeException If query execution fails
      */
-    public static function find(string $value, ?string $column = 'id'): ?array
+    public function find(string $value, ?string $column = 'id'): ?array
     {
         try {
-            return (new static)->db->query(
+            return $this->db->query(
                 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' = :value LIMIT 1',
                 ['value' => $value]
             )->fetch(); // Fetch a single record

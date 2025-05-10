@@ -20,7 +20,8 @@ class ProductsResolver
     public static function index(?string $category = null): array
     {
         try {
-            return Product::all($category);
+            $product = new Product();
+            return $product->all($category);
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to fetch products: ' . $e->getMessage());
         }
@@ -36,11 +37,12 @@ class ProductsResolver
     public static function show(string $productId): array
     {
         try {
-            $product = Product::find($productId);
-            if (!$product) {
+            $product = new Product();
+            $result = $product->find($productId);
+            if (!$result) {
                 throw new RuntimeException("Product with ID $productId not found");
             }
-            return $product;
+            return $result;
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to fetch product: ' . $e->getMessage());
         }

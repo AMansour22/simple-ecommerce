@@ -31,7 +31,8 @@ class OrdersResolver
         $db->beginTransaction();
 
         try {
-            $orderResult = Order::create($db);
+            $order = new Order();
+            $orderResult = $order->create();
             if (!$orderResult['success']) {
                 throw new RuntimeException($orderResult['error']);
             }
@@ -40,11 +41,12 @@ class OrdersResolver
             $totalAmount = 0.0;
             $currency = null;
 
+            $orderItem = new OrderItem();
             foreach ($args['items'] as $item) {
                 self::validateItemAttributes($db, $item);
                 $productDetails = self::calculatePaidAmount($db, $item);
 
-                $insertResult = OrderItem::insertItem($db, $orderId, $productDetails);
+                $insertResult = $orderItem->insertItem($orderId, $productDetails);
                 if (!$insertResult['success']) {
                     throw new RuntimeException($insertResult['error']);
                 }
@@ -53,7 +55,7 @@ class OrdersResolver
                 $currency = $currency ?? $productDetails['paidCurrency'];
             }
 
-            $updateResult = Order::update($db, $orderId, $totalAmount, $currency);
+            $updateResult = $order->update($orderId, $totalAmount, $currency);
             if (!$updateResult['success']) {
                 throw new RuntimeException($updateResult['error']);
             }
