@@ -2,20 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { Cart, CartModal, Loading, Logo, NavigationMenu } from '.';
-import { useDataContext } from '../DataContext';
-import { GET_CATEGORIES_AND_PRODUCTS, GET_PRODUCTS, GET_CATEGORIES } from '../graphql/queries';
+import { useCart } from '../contexts/CartContext';
+import { useProduct } from '../contexts/ProductContext';
+import { GET_PRODUCTS, GET_CATEGORIES } from '../graphql/queries';
 
 const Header = () => {
   const { category } = useParams();
-  const {
-    cartItems,
-    setSelectedCategory,
-    setProductsData,
-    isCartOpen,
-    setIsCartOpen,
-    categories,
-    setCategories,
-  } = useDataContext();
+  const { cartItems, isCartOpen, setIsCartOpen } = useCart();
+  const { setSelectedCategory, setProductsData, categories, setCategories } =
+    useProduct();
   const [showModal, setShowModal] = useState(false);
 
   // Sync context's isCartOpen with local showModal in both directions
@@ -38,13 +33,22 @@ const Header = () => {
   };
 
   // Fetch categories only once when component mounts
-  const { loading: categoriesLoading, error: categoriesError } = useQuery(GET_CATEGORIES, {
-    onCompleted: (data) => {
-      const categoryNames = data.categories.map((cat) => cat.name);
-      setCategories(categoryNames);
-      setSelectedCategory(category ?? categoryNames[0]);
-    },
-  });
+  const { loading: categoriesLoading, error: categoriesError } = useQuery(
+    GET_CATEGORIES,
+    {
+      onCompleted: (data) => {
+        const categoryNames = data.categories.map((cat) => cat.name);
+        setCategories(categoryNames);
+        // If no category in URL, set to first category but don't update URL
+        if (!category) {
+          setSelectedCategory(categoryNames[0]);
+          fetchProducts({ variables: { category: categoryNames[0] } });
+        } else {
+          setSelectedCategory(category);
+        }
+      },
+    }
+  );
 
   // Fetch products when category changes
   const [fetchData, { loading: dataLoading, error: dataError }] = useLazyQuery(

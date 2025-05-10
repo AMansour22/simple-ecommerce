@@ -2,16 +2,13 @@ import PropTypes from 'prop-types';
 import { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const DataContext = createContext();
+const CartContext = createContext();
 
-export const DataProvider = ({ children }) => {
-  const [productsData, setProductsData] = useState([]);
+export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(
     JSON.parse(localStorage.getItem('cartItems')) || []
   );
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isCartOpen, setIsCartOpen] = useState(false); 
-  const [categories, setCategories] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (
     product = {},
@@ -67,7 +64,7 @@ export const DataProvider = ({ children }) => {
 
     setCartItems(existingCartItems);
     localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
-    setIsCartOpen(true); // Open cart modal when item is added
+    setIsCartOpen(true);
     toast.success('Item added to cart!');
   };
 
@@ -128,34 +125,28 @@ export const DataProvider = ({ children }) => {
   const emptyCart = () => {
     localStorage.removeItem('cartItems');
     setCartItems([]);
-    setIsCartOpen(false); // Close cart modal when emptied
+    setIsCartOpen(false);
   };
 
   return (
-    <DataContext.Provider
+    <CartContext.Provider
       value={{
-        productsData,
-        setProductsData,
-        selectedCategory,
-        setSelectedCategory,
-        addToCart,
         cartItems,
+        isCartOpen,
+        setIsCartOpen,
+        addToCart,
         updateCartItemQuantity,
         updateCartItemAttribute,
         emptyCart,
-        isCartOpen,
-        setIsCartOpen,
-        categories,
-        setCategories,
       }}
     >
       {children}
-    </DataContext.Provider>
+    </CartContext.Provider>
   );
 };
 
-export const useDataContext = () => useContext(DataContext);
+export const useCart = () => useContext(CartContext);
 
-DataProvider.propTypes = {
+CartProvider.propTypes = {
   children: PropTypes.node.isRequired,
-};
+}; 

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import DOMPurify from 'dompurify';
 import parse from 'html-react-parser';
-import { useDataContext } from '../DataContext';
+import { useCart } from '../contexts/CartContext';
 
 const ProductAttributes = ({
   product,
@@ -11,7 +11,7 @@ const ProductAttributes = ({
   itemSelectedAttributes = [],
   isReadOnly = false,
 }) => {
-  const { addToCart, updateCartItemAttribute } = useDataContext();
+  const { addToCart, updateCartItemAttribute } = useCart();
   const [selectedAttributes, setSelectedAttributes] = useState(
     itemSelectedAttributes
   );

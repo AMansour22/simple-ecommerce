@@ -1,8 +1,8 @@
 import { ProductCard } from '../components';
-import { useDataContext } from '../DataContext';
+import { useProduct } from '../contexts/ProductContext';
 
 function Products() {
-  const { selectedCategory, productsData } = useDataContext();
+  const { selectedCategory, productsData } = useProduct();
 
   return (
     <main className="mt-14">
@@ -11,7 +11,7 @@ function Products() {
       {/* Render product cards if data exists */}
       {!!productsData.length && (
         <section className="grid grid-cols-auto-fill-350 gap-x-4 gap-y-8">
-          {productsData.map(product => (
+          {productsData.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </section>

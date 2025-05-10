@@ -3,11 +3,11 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { PLACE_ORDER } from '../../graphql/mutations';
 import { Spinner } from '../';
-import { useDataContext } from '../../DataContext';
+import { useCart } from '../../contexts/CartContext';
 
 function PlaceOrderBtn({ className }) {
   const [placeOrder, { loading }] = useMutation(PLACE_ORDER);
-  const { emptyCart } = useDataContext();
+  const { emptyCart } = useCart();
 
   // Handle order placement with cart validation and error handling
   const handlePlaceOrder = async () => {
@@ -20,10 +20,10 @@ function PlaceOrderBtn({ className }) {
 
     // Prepare order input from cart items
     const orderInput = {
-      items: cartItems.map(item => ({
+      items: cartItems.map((item) => ({
         productId: item.product.id,
         quantity: item.quantity,
-        attributeValues: item.selectedAttributes.map(attr => ({
+        attributeValues: item.selectedAttributes.map((attr) => ({
           id: attr.id,
           value: attr.value,
         })),
@@ -51,14 +51,12 @@ function PlaceOrderBtn({ className }) {
 
   return (
     <button
-      type="button"
-      className={`btn-cta flex items-center justify-center disabled:opacity-70${className ? ' ' + className : ''}`}
+      className={`cta ${className}`}
       onClick={handlePlaceOrder}
       disabled={loading}
       data-testid="place-order-btn"
     >
-      {loading && <Spinner className="w-4 h-4 mr-2" />}
-      Place Order
+      {loading ? <Spinner /> : 'Place Order'}
     </button>
   );
 }

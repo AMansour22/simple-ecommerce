@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useDataContext } from '../DataContext';
+import { useCart } from '../contexts/CartContext';
+import { useProduct } from '../contexts/ProductContext';
 
 function NavigationMenu({ categories, handleCategoryChange }) {
-  const { selectedCategory, setIsCartOpen } = useDataContext();
+  const { selectedCategory } = useProduct();
+  const { setIsCartOpen } = useCart();
+
   const handleNavClick = (category) => {
     setIsCartOpen(false);
     handleCategoryChange(category);

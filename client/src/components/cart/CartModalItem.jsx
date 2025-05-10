@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import ProductAttributes from '../ProductAttributes';
 import ActionBtn from './ActionBtn';
-import { useDataContext } from '../../DataContext';
+import { useCart } from '../../contexts/CartContext';
 
 function CartModalItem({ item = {}, ...props }) {
-  const { updateCartItemQuantity } = useDataContext();
+  const { updateCartItemQuantity } = useCart();
   const productImage = item.product.gallery?.length
     ? item.product.gallery[0]
     : '';

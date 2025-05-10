@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Cart } from './';
 import searchingImg from '../assets/searching.png';
-import { useDataContext } from '../DataContext';
+import { useCart } from '../contexts/CartContext';
 
 function ProductCard({ product = {} }) {
-  const { addToCart } = useDataContext();
+  const { addToCart } = useCart();
 
   return (
     <article className="h-full">
@@ -13,7 +13,9 @@ function ProductCard({ product = {} }) {
         <div className="relative mb-6 flex-grow">
           <Link
             to={`/products/${product.id}`}
-            data-testid={`product-${product.name.replace(/\s+/g, '-').toLowerCase()}`}
+            data-testid={`product-${product.name
+              .replace(/\s+/g, '-')
+              .toLowerCase()}`}
             className="block h-64"
           >
             <div className="relative h-full">
@@ -40,7 +42,9 @@ function ProductCard({ product = {} }) {
           )}
         </div>
         <div className="mt-auto">
-          <h3 className="text-lg font-light capitalize truncate">{product.name}</h3>
+          <h3 className="text-lg font-light capitalize truncate">
+            {product.name}
+          </h3>
           <div className={`${!product.inStock ? 'text-muted ' : ''}text-lg`}>
             {product.prices[0]?.currency?.symbol} {product.prices[0]?.amount}
           </div>
