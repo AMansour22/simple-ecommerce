@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { Cart, CartModal, Loading, Logo, NavigationMenu } from '.';
 import { useDataContext } from '../DataContext';
-import { GET_CATEGORIES_AND_PRODUCTS, GET_PRODUCTS } from '../graphql/queries';
+import { GET_CATEGORIES_AND_PRODUCTS, GET_PRODUCTS, GET_CATEGORIES } from '../graphql/queries';
 
 const Header = () => {
   const { category } = useParams();
@@ -13,9 +13,10 @@ const Header = () => {
     setProductsData,
     isCartOpen,
     setIsCartOpen,
+    categories,
+    setCategories,
   } = useDataContext();
   const [showModal, setShowModal] = useState(false);
-  const [categories, setCategories] = useState([]);
 
   // Sync context's isCartOpen with local showModal in both directions
   useEffect(() => {
@@ -36,26 +37,36 @@ const Header = () => {
     setSelectedCategory(category);
   };
 
+  // Fetch categories only once when component mounts
+  const { loading: categoriesLoading, error: categoriesError } = useQuery(GET_CATEGORIES, {
+    onCompleted: (data) => {
+      const categoryNames = data.categories.map((cat) => cat.name);
+      setCategories(categoryNames);
+      setSelectedCategory(category ?? categoryNames[0]);
+    },
+  });
+
+  // Fetch products when category changes
   const [fetchData, { loading: dataLoading, error: dataError }] = useLazyQuery(
-    GET_CATEGORIES_AND_PRODUCTS,
+    GET_PRODUCTS,
     {
       onCompleted: (data) => {
         setProductsData(data.products);
-        setCategories(data.categories.map((cat) => cat.name));
-        setSelectedCategory(category ?? data.categories[0]?.name);
       },
     }
   );
 
   useEffect(() => {
-    fetchData({ variables: { category } });
+    if (category) {
+      fetchData({ variables: { category } });
+    }
   }, [fetchData, category]);
 
   useEffect(() => {
     document.body.style.overflowY = showModal ? 'hidden' : 'auto';
   }, [showModal]);
 
-  if (dataError) {
+  if (categoriesError || dataError) {
     return (
       <p className="py-2 my-8 font-semibold text-center text-white bg-red-500">
         Oops! Something broke. Try reloading the page or come back later.
@@ -63,7 +74,7 @@ const Header = () => {
     );
   }
 
-  if (dataLoading) return <Loading />;
+  if (categoriesLoading || dataLoading) return <Loading />;
 
   return (
     <header className="relative z-10 flex items-center justify-between">

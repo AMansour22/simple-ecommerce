@@ -11,6 +11,7 @@ export const DataProvider = ({ children }) => {
   );
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false); 
+  const [categories, setCategories] = useState([]);
 
   const addToCart = (
     product = {},
@@ -144,6 +145,8 @@ export const DataProvider = ({ children }) => {
         emptyCart,
         isCartOpen,
         setIsCartOpen,
+        categories,
+        setCategories,
       }}
     >
       {children}
