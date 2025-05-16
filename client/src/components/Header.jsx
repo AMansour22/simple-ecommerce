@@ -1,32 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Cart, CartModal, Loading, Logo, NavigationMenu } from '.';
-import { useCart } from '../contexts/CartContext';
-import { useProduct } from '../contexts/ProductContext';
+import useHeader from '../hooks/useHeader';
 
 const Header = () => {
-  const { category } = useParams();
-  const { cartItems, isCartOpen, setIsCartOpen } = useCart();
-  const { selectedCategory, setSelectedCategory, categories, loading } = useProduct();
-  const [showModal, setShowModal] = useState(false);
-
-  // Sync context's isCartOpen with local showModal in both directions
-  useEffect(() => {
-    setShowModal(isCartOpen);
-  }, [isCartOpen]);
-
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-    setIsCartOpen((prev) => !prev); // Sync context state with local state
-  };
-
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
-
-  useEffect(() => {
-    document.body.style.overflowY = showModal ? 'hidden' : 'auto';
-  }, [showModal]);
+  const {
+    cartItems,
+    showModal,
+    toggleModal,
+    handleCategoryChange,
+    categories,
+    loading,
+  } = useHeader();
 
   if (loading) return <Loading />;
 

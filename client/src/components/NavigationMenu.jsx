@@ -1,16 +1,12 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext';
-import { useProduct } from '../contexts/ProductContext';
+import useNavigationMenu from '../hooks/useNavigationMenu';
 
 function NavigationMenu({ categories, handleCategoryChange }) {
-  const { selectedCategory } = useProduct();
-  const { setIsCartOpen } = useCart();
-
-  const handleNavClick = (category) => {
-    setIsCartOpen(false);
-    handleCategoryChange(category);
-  };
+  const { selectedCategory, handleNavClick } = useNavigationMenu({
+    categories,
+    handleCategoryChange,
+  });
 
   return (
     <nav className="z-10">

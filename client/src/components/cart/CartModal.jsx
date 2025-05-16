@@ -1,19 +1,10 @@
 import PropTypes from 'prop-types';
 import CartModalItem from './CartModalItem';
 import PlaceOrderBtn from './PlaceOrderBtn';
+import useCartModal from '../../hooks/useCartModal';
 
 function CartModal({ cartItems = [], onClose }) {
-  const totalPrice = cartItems
-    .reduce(
-      (total, item) =>
-        total + parseFloat(item.product?.prices[0]?.amount) * item.quantity,
-      0
-    )
-    .toFixed(2);
-  const totalItems = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  const { totalPrice, totalItems } = useCartModal({ cartItems });
 
   return (
     <section className="absolute z-50 bg-white shadow-lg -right-3.5 top-full w-80 py-6 px-4 max-h-[calc(100vh-4rem)] overflow-y-auto">
