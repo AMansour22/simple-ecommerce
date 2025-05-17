@@ -21,7 +21,10 @@ const Header = () => {
         handleCategoryChange={handleCategoryChange}
       />
       <div className="absolute inset-x-0 flex items-center justify-center mx-auto">
-        <Link to="/" onClick={() => handleCategoryChange(categories[0])}>
+        <Link to="/" onClick={() => {
+          handleCategoryChange(categories[0]);
+          if (showModal) toggleModal();
+        }}>
           <Logo />
         </Link>
       </div>

@@ -1,9 +1,19 @@
 import { ProductCard } from '../components';
 import { useProduct } from '../contexts/ProductContext';
 import { Loading } from '../components';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Products() {
-  const { selectedCategory, productsData, loading } = useProduct();
+  const { selectedCategory, productsData, loading, setSelectedCategory } = useProduct();
+  const { category: urlCategory } = useParams();
+
+  // Sync URL category with context when URL changes
+  useEffect(() => {
+    if (urlCategory && urlCategory !== selectedCategory) {
+      setSelectedCategory(urlCategory);
+    }
+  }, [urlCategory, selectedCategory, setSelectedCategory]);
 
   if (loading) return <Loading />;
 

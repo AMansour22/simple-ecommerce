@@ -7,12 +7,12 @@ function PlaceOrderBtn({ className }) {
 
   return (
     <button
-      className={`cta ${className}`}
+      className={`cta ${className} flex items-center justify-center`}
       onClick={handlePlaceOrder}
       disabled={loading}
       data-testid="place-order-btn"
     >
-      {loading ? <Spinner /> : 'Place Order'}
+      {loading ? <Spinner className="w-5 h-5" /> : 'Place Order'}
     </button>
   );
 }
